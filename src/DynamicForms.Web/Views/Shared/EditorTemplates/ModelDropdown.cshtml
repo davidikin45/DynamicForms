@@ -1,0 +1,4 @@
+﻿@using DND.Common;
+@using DND.Common.Extensions;
+@model dynamic
+@(Html.DropDownListFromDatabase<ApplicationContext>("", new { @class = "custom-select" }))

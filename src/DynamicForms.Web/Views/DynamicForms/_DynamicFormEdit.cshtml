@@ -1,0 +1,12 @@
+﻿@model dynamic
+
+@{
+    var properties = ((DynamicFormsModelMetadata)ViewData.ModelMetadata).PropertiesRuntime(ViewData.Model);
+    var propertyModelExplorers = Html.ModelExplorerPropertiesRuntime();
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+    @Html.EditorForModel()
+}

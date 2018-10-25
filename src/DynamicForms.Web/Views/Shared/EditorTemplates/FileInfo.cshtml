@@ -1,0 +1,14 @@
+﻿@model FileInfo
+
+@if (Model.IsImage())
+{
+    <img src="@Model.VirtualPathSlug(200, 0)" />
+}
+else if (Model.IsVideo())
+{
+    <video width="200" src="@Model.VirtualPathSlug()" poster="@Model.VirtualPathSlug(200, 0)" controls preload="none"></video>
+}
+else
+{
+    <img src="@Model.VirtualPathSlug(0,0,75)" />
+}

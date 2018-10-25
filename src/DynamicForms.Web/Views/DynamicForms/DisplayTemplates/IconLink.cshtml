@@ -1,0 +1,14 @@
+﻿@model string
+@{ 
+    Microsoft.AspNetCore.Routing.RouteValueDictionary routeValues = null;
+    if (ViewData.ModelMetadata.AdditionalValues.ContainsKey("RouteValueDictionary"))
+    {
+        routeValues = (Microsoft.AspNetCore.Routing.RouteValueDictionary)ViewData.ModelMetadata.AdditionalValues["RouteValueDictionary"];
+    }
+    string linkText = (string)ViewData.ModelMetadata.AdditionalValues["LinkText"] ?? (string)ViewData.TemplateInfo.FormattedModelValue;
+    string action = (string)ViewData.ModelMetadata.AdditionalValues["ActionName"];
+    string controller = (string)ViewData.ModelMetadata.AdditionalValues["ControllerName"];
+    string iconClass = (string)ViewData.ModelMetadata.AdditionalValues["IconClass"];
+    object htmlAttributes = (object)ViewData.ModelMetadata.AdditionalValues["HtmlAttributes"];
+}
+@Html.IconLink(linkText, action, controller, routeValues, iconClass, htmlAttributes)

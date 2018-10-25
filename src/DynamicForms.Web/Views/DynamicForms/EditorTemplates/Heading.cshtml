@@ -1,0 +1,8 @@
+﻿@model string
+@{ 
+    string tagName = (string)ViewData.ModelMetadata.AdditionalValues["TagName"];
+    string startTag = "<"+ tagName  +" class=\"" + (string)ViewData.ModelMetadata.AdditionalValues["Class"] +"\" >";
+    string innerHtml = (string)ViewData.ModelMetadata.AdditionalValues["HeadingText"] ?? (string)ViewData.TemplateInfo.FormattedModelValue;
+    string endTag = "</" + tagName + ">";
+}
+@Html.Raw(startTag + innerHtml + endTag)

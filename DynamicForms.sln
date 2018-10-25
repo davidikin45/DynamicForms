@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicForms.Web", "DynamicForms.Web\DynamicForms.Web.csproj", "{0919F1F6-FFEB-41CE-BC47-0C70689B17E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicForms.Web", "src\DynamicForms.Web\DynamicForms.Web.csproj", "{6F2040B9-295B-4C2B-BF52-FF470F7992B4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicForms", "src\DynamicForms\DynamicForms.csproj", "{83034C01-EFDC-4006-B3AB-050C521DF594}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0919F1F6-FFEB-41CE-BC47-0C70689B17E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0919F1F6-FFEB-41CE-BC47-0C70689B17E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0919F1F6-FFEB-41CE-BC47-0C70689B17E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0919F1F6-FFEB-41CE-BC47-0C70689B17E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F2040B9-295B-4C2B-BF52-FF470F7992B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F2040B9-295B-4C2B-BF52-FF470F7992B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F2040B9-295B-4C2B-BF52-FF470F7992B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F2040B9-295B-4C2B-BF52-FF470F7992B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83034C01-EFDC-4006-B3AB-050C521DF594}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83034C01-EFDC-4006-B3AB-050C521DF594}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83034C01-EFDC-4006-B3AB-050C521DF594}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83034C01-EFDC-4006-B3AB-050C521DF594}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
