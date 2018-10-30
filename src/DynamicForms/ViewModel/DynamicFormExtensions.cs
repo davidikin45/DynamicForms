@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 
 namespace DynamicForms.ViewModel
@@ -7,6 +8,11 @@ namespace DynamicForms.ViewModel
     //https://docs.microsoft.com/en-us/aspnet/core/mvc/models/model-binding?view=aspnetcore-2.1
     public static class DynamicFormExtensions
     {
+        public static DynamicForm BindForm(this Controller controller, DynamicForm form)
+        {
+            return form.BindData(controller.Request.Form, controller.RouteData, controller.Request.Query);
+        }
+
         public static DynamicForm BindData(this DynamicForm form, IFormCollection formData, RouteData routeData, IQueryCollection queryStringData)
         {
             foreach (var propertyName in form.GetDynamicMemberNames())

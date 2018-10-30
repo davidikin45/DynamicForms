@@ -1,6 +1,6 @@
 ﻿@model dynamic
 @{
-    var properties = ((CustomModelMetadata)ViewData.ModelMetadata).PropertiesRuntime(ViewData.Model);
+    var properties = ((DynamicFormsModelMetadata)ViewData.ModelMetadata).PropertiesRuntime(ViewData.Model);
     var propertyModelExplorers = Html.ModelExplorerPropertiesRuntime();
 }
 <dl class="row">

@@ -18,7 +18,6 @@ namespace DynamicForms.Web.Controllers
         public IActionResult Edit()
         {
             var form = SetupForm();
-
             return View("_DynamicFormEdit", form);
         }
         #endregion
@@ -30,7 +29,7 @@ namespace DynamicForms.Web.Controllers
         private IActionResult Update()
         {
             var form = SetupForm();
-            form.BindData(this.Request.Form, this.RouteData, this.Request.Query);
+            this.BindForm(form);
 
             if (TryValidateModel(form))
             {
@@ -96,13 +95,13 @@ namespace DynamicForms.Web.Controllers
             //text-success
             model.AddAttribute("SectionHeading", new HeadingAttributeH3("text-danger"));
 
-            model.AddAttribute("Dropdown", new DropdownAttribute(Type.GetType("DND.Domain.Blog.Tags.Tag, DND.Domain.Blog"), "Name", "Name"));
-            model.AddAttribute("DropdownMany", new DropdownAttribute(Type.GetType("DND.Domain.Blog.Tags.Tag, DND.Domain.Blog"), "Name", "Name"));
+          //  model.AddAttribute("Dropdown", new DropdownAttribute(Type.GetType("DND.Domain.Blog.Tags.Tag, DND.Domain.Blog"), "Name", "Name"));
+           // model.AddAttribute("DropdownMany", new DropdownAttribute(Type.GetType("DND.Domain.Blog.Tags.Tag, DND.Domain.Blog"), "Name", "Name"));
 
-            model.AddAttribute("RadioList", new CheckboxOrRadioAttribute(Type.GetType("DND.Domain.Blog.Tags.Tag, DND.Domain.Blog"), "Name", "Name"));
+           // model.AddAttribute("RadioList", new CheckboxOrRadioAttribute(Type.GetType("DND.Domain.Blog.Tags.Tag, DND.Domain.Blog"), "Name", "Name"));
             model.AddAttribute("RadioListButtons", new CheckboxOrRadioButtonsAttribute(new List<string>() { "Option 1", "Option 2", "Option 3", "Option 4" }));
 
-            model.AddAttribute("CheckboxList", new CheckboxOrRadioAttribute(Type.GetType("DND.Domain.Blog.Tags.Tag, DND.Domain.Blog"), "Name", "Name"));
+          //  model.AddAttribute("CheckboxList", new CheckboxOrRadioAttribute(Type.GetType("DND.Domain.Blog.Tags.Tag, DND.Domain.Blog"), "Name", "Name"));
             //wrapper.AddAttribute("CheckboxList", new CheckboxOrRadioInlineAttribute());
             model.AddAttribute("CheckboxList", new LimitCountAttribute(3, 5));
 

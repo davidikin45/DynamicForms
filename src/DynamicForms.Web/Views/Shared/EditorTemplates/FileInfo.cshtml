@@ -1,6 +1,6 @@
 ﻿@model FileInfo
 
-@if (Model.IsImage())
+@*@if (Model.IsImage())
 {
     <img src="@Model.VirtualPathSlug(200, 0)" />
 }
@@ -11,4 +11,4 @@ else if (Model.IsVideo())
 else
 {
     <img src="@Model.VirtualPathSlug(0,0,75)" />
-}
+}*@

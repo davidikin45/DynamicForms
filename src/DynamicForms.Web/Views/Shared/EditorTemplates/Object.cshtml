@@ -8,11 +8,7 @@
     var hasCollections = collections.Count() > 0;
 
     Dictionary<object, string> guids = new Dictionary<object, string>();
-    foreach (var collection in collections)
-    {
-        guids.Add(collection, Guid.NewGuid().ToString());
-    }
-
+    foreach (var collection in collections) { guids.Add(collection, Guid.NewGuid().ToString()); }
     var htmlFieldPrefix = Html.ViewContext.ViewData.TemplateInfo.HtmlFieldPrefix;
 }
 
