@@ -1,7 +1,7 @@
 ﻿@model dynamic
 @{
-    var properties = ((DynamicFormsModelMetadata)ViewData.ModelMetadata).PropertiesRuntime(ViewData.Model);
-    var propertyModelExplorers = Html.ModelExplorerPropertiesRuntime();
+//var properties = ((DynamicFormsModelMetadata)ViewData.ModelMetadata).Contextualize(ViewData.Model);
+//var propertyModelExplorers = Html.ViewData.ModelExplorer.Contextualize(Html.MetadataProvider);
 }
 <dl class="row">
     @foreach (var prop in ViewData.ModelMetadata.Properties

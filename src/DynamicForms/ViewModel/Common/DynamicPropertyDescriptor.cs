@@ -48,7 +48,8 @@ namespace DynamicForms.ViewModel.Common
 
         public override object GetValue(object component) {
             if (_owner != component) throw new InvalidOperationException("GetValue can only be used with the descriptor's owner.");
-            return DynamicHelper.GetValue(component, _propertyName);
+            var value = DynamicHelper.GetValue(component, _propertyName);
+            return value;
         }
 
         public override void SetValue(object component, object value) {

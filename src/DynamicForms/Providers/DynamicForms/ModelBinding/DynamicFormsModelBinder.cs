@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace DynamicForms.Providers.DynamicForms.ModelBinding
@@ -41,15 +42,54 @@ namespace DynamicForms.Providers.DynamicForms.ModelBinding
 
         private async Task BindModelCoreAsync(ModelBindingContext bindingContext)
         {
-            bindingContext.Model = await CreateModelAsync(bindingContext);
+            ModelPropertyCollection propertiesRuntime = new ModelPropertyCollection(new List<ModelMetadata>());
+
+            //Type Definition
+            if(Int32.TryParse(bindingContext.FieldName, out int index))
+            {
+                var stackField = typeof(DefaultModelBindingContext).GetField("_stack", BindingFlags.Instance | BindingFlags.NonPublic);
+                dynamic stack = stackField.GetValue(bindingContext);
+
+                dynamic collectionModel = null;
+                foreach (var stackItem in stack)
+                {
+                    var prop = stackItem.GetType().GetField("_Model", BindingFlags.Instance | BindingFlags.NonPublic);
+                    FieldInfo[] fields = stackItem.GetType().DeclaredFields;
+                    var field = fields.Where(f => f.Name == "Model").First();
+                    collectionModel = field.GetValue(stackItem);
+                }
+
+                if(index < collectionModel.Length)
+                {
+                    var model = collectionModel[index];
+                    bindingContext.Model = model;
+                    propertiesRuntime = ((DynamicFormsModelMetadata)bindingContext.ModelMetadata).Contextualize(model);
+                }
+            }
+            else
+            {
+                propertiesRuntime = ((DynamicFormsModelMetadata)_modelBinderProviderContext.Metadata).Contextualize(bindingContext.Model);
+            }
+
+            //New Instance if required
+            if (bindingContext.Model == null)
+            {
+                bindingContext.Model = await CreateModelAsync(bindingContext);
+                propertiesRuntime = ((DynamicFormsModelMetadata)bindingContext.ModelMetadata).Contextualize(bindingContext.Model);
+            }
+
             var propertyBinders = new Dictionary<ModelMetadata, IModelBinder>();
-            var propertiesRuntime2 = ((DynamicFormsModelMetadata)bindingContext.ModelMetadata).PropertiesRuntime(bindingContext.Model);
-            var propertiesRuntime = ((DynamicFormsModelMetadata)_modelBinderProviderContext.Metadata).PropertiesRuntime(bindingContext.Model);
+
+            //https://github.com/aspnet/AspNetCore/blob/c565386a3ed135560bc2e9017aa54a950b4e35dd/src/Mvc/Mvc.Core/src/ModelBinding/Binders/ComplexTypeModelBinderProvider.cs
             for (var i = 0; i < propertiesRuntime.Count; i++)
             {
                 var property = propertiesRuntime[i];
+                ((DynamicFormsModelMetadata)property).NormalHashing = true;
                 propertyBinders.Add(property, _modelBinderProviderContext.CreateBinder(property));
+                ((DynamicFormsModelMetadata)property).NormalHashing = false;
             }
+
+            ((DynamicFormsModelMetadata)_modelBinderProviderContext.Metadata).NormalHashing = false;
 
             var complexModelBinder = new CustomComplexTypeModelBinder(propertyBinders);
 
@@ -62,7 +102,7 @@ namespace DynamicForms.Providers.DynamicForms.ModelBinding
 
             if (formSlugResult == ValueProviderResult.None)
             {
-                return null;
+                return new DynamicForm();
             }
 
             var formSlug = formSlugResult.FirstValue;
@@ -88,14 +128,14 @@ namespace DynamicForms.Providers.DynamicForms.ModelBinding
             }
 
             return model;
-        }     
+        }
     }
 
     public class CustomComplexTypeModelBinder : ComplexTypeModelBinder
     {
         private IDictionary<ModelMetadata, IModelBinder> _propertyBinders;
         public CustomComplexTypeModelBinder(IDictionary<ModelMetadata, IModelBinder> propertyBinders)
-            :base(propertyBinders)
+            : base(propertyBinders)
         {
             _propertyBinders = propertyBinders;
         }

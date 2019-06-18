@@ -15,7 +15,7 @@ namespace DynamicForms.Providers.DynamicForms.ModelBinding
             }
 
             var modelType = context.Metadata.ModelType;
-            if (modelType.IsAssignableFrom(typeof(DynamicForm)))
+            if (typeof(DynamicForm).IsAssignableFrom(modelType))
             {
                 var dynamicFormsPresentationService = (IDynamicFormsService)context.Services.GetService(typeof(IDynamicFormsService));
                 return new DynamicFormsModelBinder(context, dynamicFormsPresentationService);

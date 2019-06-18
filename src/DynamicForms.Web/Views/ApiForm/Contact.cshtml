@@ -1,0 +1,27 @@
+﻿@model DynamicForms.Web.Controllers.ContactViewModel
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+    @Html.EditorForModel()
+    <button type="submit">submit</button>
+}
+
+@section scripts
+    {
+    <script>
+        function createCollectionItem(id, collectionItemUrl) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var elem = document.createElement('div');
+                    elem.innerHTML = this.responseText;
+                    document.getElementById(id).appendChild(elem.firstElementChild);
+                }
+            };
+            xhttp.open("GET", collectionItemUrl, true);
+            xhttp.send();
+        }
+    </script>
+}

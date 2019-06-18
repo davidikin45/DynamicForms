@@ -36,7 +36,7 @@ namespace DynamicForms.Providers.DynamicForms.Validation
             string key,
             object model)
         {
-            return new Enumerator(metadata.PropertiesRuntime(model), key, model);
+            return new Enumerator(metadata.Contextualize(model), key, model);
         }
 
         private class Enumerator : IEnumerator<ValidationEntry>

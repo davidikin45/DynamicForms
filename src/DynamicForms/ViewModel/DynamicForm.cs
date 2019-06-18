@@ -1,5 +1,7 @@
 ﻿using DynamicForms.ViewModel.Common;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Dynamic;
 
 namespace DynamicForms.ViewModel
 {
@@ -10,5 +12,13 @@ namespace DynamicForms.ViewModel
 
         }
 
+        public DynamicForm(object model)
+            :base(model)
+        {
+           
+        }
+
     }
+
+
 }

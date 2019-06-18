@@ -2,22 +2,34 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Filters\**" />
+    <Compile Remove="ModelBinding\HybridBinding\**" />
+    <EmbeddedResource Remove="Filters\**" />
+    <EmbeddedResource Remove="ModelBinding\HybridBinding\**" />
+    <None Remove="Filters\**" />
+    <None Remove="ModelBinding\HybridBinding\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Attributes\DynamicForms\" />
     <Folder Include="Attributes\Validation\" />
     <Folder Include="Cookies\" />
+    <Folder Include="Razor\" />
     <Folder Include="Providers\ModelMetadata\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AspNetCore.Mvc.MvcAsApi" Version="1.0.0" />
     <PackageReference Include="HtmlTags.AspNetCore" Version="7.0.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.1.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.1.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>

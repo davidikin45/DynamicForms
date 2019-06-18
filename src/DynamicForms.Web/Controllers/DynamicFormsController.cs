@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace DynamicForms.Web.Controllers
 {
@@ -17,8 +19,13 @@ namespace DynamicForms.Web.Controllers
         [Route("dynamic")]
         public IActionResult Edit()
         {
-            var form = SetupForm();
-            return View("_DynamicFormEdit", form);
+            var form = new DynamicForm[]{
+                SetupForm(),
+                SetupForm(),
+                SetupForm()
+            };
+
+            return View("DynamicForm", form);
         }
         #endregion
 
@@ -26,17 +33,24 @@ namespace DynamicForms.Web.Controllers
         [ValidateAntiForgeryToken]
         [Route("dynamic")]
         [HttpPost]
-        private IActionResult Update()
+        public async Task<IActionResult> Update()
         {
-            var form = SetupForm();
-            this.BindForm(form);
+            var form = new DynamicForm[]{
+                SetupForm(),
+                SetupForm(),
+                SetupForm()
+            };
+            //this.BindForm(form);
+
+            //binds and validates
+            await TryUpdateModelAsync(form);
 
             if (TryValidateModel(form))
             {
 
             }
 
-            return View("_DynamicFormEdit", form);
+            return View("DynamicForm", form);
         }
         #endregion
 
@@ -44,8 +58,8 @@ namespace DynamicForms.Web.Controllers
         {
 
             //1. Setup Form definition
-            dynamic model = new DynamicForm();
-            model.Add("Text", "");
+            DynamicForm model = new DynamicForm();
+            model.Add("Text", "David");
             model.Add("Email", "");
             model.Add("Website", "");
             model.Add("PhoneNumber", "");
@@ -93,6 +107,7 @@ namespace DynamicForms.Web.Controllers
             model.AddAttribute("Slider", new SliderAttribute(0, 100));
 
             //text-success
+            model.Add("SectionHeading","");
             model.AddAttribute("SectionHeading", new HeadingAttributeH3("text-danger"));
 
           //  model.AddAttribute("Dropdown", new DropdownAttribute(Type.GetType("DND.Domain.Blog.Tags.Tag, DND.Domain.Blog"), "Name", "Name"));
@@ -132,6 +147,7 @@ namespace DynamicForms.Web.Controllers
 
             model.AddAttribute("MultipleMediaFiles", new FileImageAudioVideoAcceptAttribute());
 
+            model.Add("Submit", "");
             model.AddAttribute("Submit", new NoLabelAttribute());
             model.AddAttribute("Submit", new SubmitButtonAttribute("btn btn-block btn-success"));
 

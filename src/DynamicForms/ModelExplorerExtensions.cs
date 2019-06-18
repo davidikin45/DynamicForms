@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using DynamicForms.Providers.DynamicForms.Metadata;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System;
@@ -7,15 +8,17 @@ using System.ComponentModel;
 
 namespace DynamicForms
 {
+    //https://github.com/aspnet/AspNetCore/blob/c565386a3ed135560bc2e9017aa54a950b4e35dd/src/Mvc/Mvc.ViewFeatures/src/ViewDataDictionary.cs
+    //https://github.com/aspnet/AspNetCore/blob/c565386a3ed135560bc2e9017aa54a950b4e35dd/src/Mvc/Mvc.ViewFeatures/src/ModelExplorer.cs
     public static class ModelExplorerExtensions
     {
-        public static IEnumerable<ModelExplorer> ModelExplorerPropertiesRuntime(this IHtmlHelper html)
+        public static IEnumerable<ModelExplorer> Contextualize(this ModelExplorer modelExplorer, IModelMetadataProvider metadataProvider)
         {
-            var propertiesFields = html.ViewData.ModelExplorer.GetFieldValue("_properties");
-            if (propertiesFields == null && html.ViewData.Model is ICustomTypeDescriptor)
+            var propertiesFields = modelExplorer.GetFieldValue("_properties");
+            if (propertiesFields == null && modelExplorer.Model is ICustomTypeDescriptor)
             {
-                ICustomTypeDescriptor model = html.ViewData.Model as ICustomTypeDescriptor;
-                var metadata = GetMetadataForRuntimeType(html);
+                ICustomTypeDescriptor model = modelExplorer.Model as ICustomTypeDescriptor;
+                var metadata = GetMetadataForRuntimeType(modelExplorer, metadataProvider);
                 var properties = metadata.Properties;
 
                 var propertyDescriptors = model.GetProperties();
@@ -37,22 +40,21 @@ namespace DynamicForms
                         }
                     }
 
-                    _properties[i] = CreateExplorerForProperty(html.MetadataProvider, html.ViewData.ModelExplorer, propertyMetadata, propertyDescriptor);
+                    _properties[i] = CreateExplorerForProperty(metadataProvider, modelExplorer, propertyMetadata, propertyDescriptor);
                 }
 
-                html.ViewData.ModelExplorer.SetFieldValue("_properties", _properties);
+                modelExplorer.SetFieldValue("_properties", _properties);
             }
-            return html.ViewData.ModelExplorer.Properties;
+            return modelExplorer.Properties;
         }
 
-        private static ModelMetadata GetMetadataForRuntimeType(IHtmlHelper html)
+        private static ModelMetadata GetMetadataForRuntimeType(ModelExplorer modelExplorer, IModelMetadataProvider metadataProvider)
         {
-            // We want to make sure we're looking at the runtime properties of the model, and for
-            // that we need the model metadata of the runtime type.
-            var metadata = html.ViewData.ModelExplorer.Metadata;
-            if (html.ViewData.ModelExplorer.Metadata.ModelType != html.ViewData.ModelExplorer.ModelType)
+            //The model Explorer always has the parents metadata.
+            var metadata = modelExplorer.Metadata;
+            if (modelExplorer.ModelType != modelExplorer.Metadata.ModelType)
             {
-                metadata = html.MetadataProvider.GetMetadataForType(html.ViewData.ModelExplorer.ModelType);
+                 metadata = metadataProvider.GetMetadataForType(modelExplorer.ModelType);
             }
 
             return metadata;

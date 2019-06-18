@@ -1,10 +1,10 @@
 ﻿@model dynamic
 @{
-    var properties = ((DynamicFormsModelMetadata)ViewData.ModelMetadata).PropertiesRuntime(ViewData.Model);
-    var propertyModelExplorers = Html.ModelExplorerPropertiesRuntime();
+    //var properties = ((DynamicFormsModelMetadata)ViewData.ModelMetadata).Contextualize(ViewData.Model);
+    //var propertyModelExplorers = Html.ViewData.ModelExplorer.Contextualize(Html.MetadataProvider);
 
     string guid = Guid.NewGuid().ToString();
-    var collections = ViewData.ModelMetadata.Properties.Where(p => p.DataTypeName == "ModelRepeater" && (((bool)ViewBag.EditMode && p.ShowForEdit) || ((bool)ViewBag.CreateMode && (!p.AdditionalValues.ContainsKey("ShowForCreate") || (bool)p.AdditionalValues["ShowForCreate"]))));
+    var collections = ViewData.ModelMetadata.Properties.Where(p => p.DataTypeName == "ModelRepeater" && ((ViewBag.EditMode != null && (bool)ViewBag.EditMode && p.ShowForEdit) || (ViewBag.CreateMode != null && (bool)ViewBag.CreateMode && (!p.AdditionalValues.ContainsKey("ShowForCreate") || (bool)p.AdditionalValues["ShowForCreate"]))));
     var hasCollections = collections.Count() > 0;
 
     Dictionary<object, string> guids = new Dictionary<object, string>();
@@ -42,7 +42,7 @@
 {
     var readOnlyHiddenInput = false;
 
-    if (((bool)ViewBag.CreateMode && prop.AdditionalValues.ContainsKey("ReadOnlyHiddenInputCreate") && (bool)prop.AdditionalValues["ReadOnlyHiddenInputCreate"]) || ((bool)ViewBag.EditMode && prop.AdditionalValues.ContainsKey("ReadOnlyHiddenInputEdit") && (bool)prop.AdditionalValues["ReadOnlyHiddenInputEdit"]))
+    if ((ViewBag.CreateMode != null && (bool)ViewBag.CreateMode && prop.AdditionalValues.ContainsKey("ReadOnlyHiddenInputCreate") && (bool)prop.AdditionalValues["ReadOnlyHiddenInputCreate"]) || (ViewBag.EditMode != null && (bool)ViewBag.EditMode && prop.AdditionalValues.ContainsKey("ReadOnlyHiddenInputEdit") && (bool)prop.AdditionalValues["ReadOnlyHiddenInputEdit"]))
     {
         readOnlyHiddenInput = true;
     }
@@ -117,7 +117,7 @@
 
     var readOnlyHiddenInput = false;
 
-    if (((bool)ViewBag.CreateMode && prop.AdditionalValues.ContainsKey("ReadOnlyHiddenInputCreate") && (bool)prop.AdditionalValues["ReadOnlyHiddenInputCreate"]) || ((bool)ViewBag.EditMode && prop.AdditionalValues.ContainsKey("ReadOnlyHiddenInputEdit") && (bool)prop.AdditionalValues["ReadOnlyHiddenInputEdit"]))
+    if ((ViewBag.CreateMode!= null && (bool)ViewBag.CreateMode && prop.AdditionalValues.ContainsKey("ReadOnlyHiddenInputCreate") && (bool)prop.AdditionalValues["ReadOnlyHiddenInputCreate"]) || (ViewBag.EditMode != null && (bool)ViewBag.EditMode && prop.AdditionalValues.ContainsKey("ReadOnlyHiddenInputEdit") && (bool)prop.AdditionalValues["ReadOnlyHiddenInputEdit"]))
     {
         readOnlyHiddenInput = true;
     }

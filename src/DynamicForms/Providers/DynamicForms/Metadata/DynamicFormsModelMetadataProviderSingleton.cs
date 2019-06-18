@@ -10,6 +10,34 @@ using System.Reflection;
 
 namespace DynamicForms.Providers.DynamicForms.Metadata
 {
+
+    //ModelMetadata = Type
+    //https://github.com/aspnet/AspNetCore/blob/c565386a3ed135560bc2e9017aa54a950b4e35dd/src/Mvc/Mvc.Core/src/ModelBinding/Metadata/DefaultModelMetadata.cs
+
+    //ModelExplorer = Type + Model Instance
+    //https://github.com/aspnet/AspNetCore/blob/c565386a3ed135560bc2e9017aa54a950b4e35dd/src/Mvc/Mvc.ViewFeatures/src/ViewDataDictionary.cs
+    //https://github.com/aspnet/AspNetCore/blob/c565386a3ed135560bc2e9017aa54a950b4e35dd/src/Mvc/Mvc.ViewFeatures/src/ModelExplorer.cs
+
+    //Render Object
+    //https://github.com/aspnet/AspNetCore/blob/c565386a3ed135560bc2e9017aa54a950b4e35dd/src/Mvc/Mvc.ViewFeatures/src/TemplateRenderer.cs
+    //https://github.com/aspnet/AspNetCore/blob/c565386a3ed135560bc2e9017aa54a950b4e35dd/src/Mvc/Mvc.ViewFeatures/src/ViewResultExecutor.cs
+
+    //Default Templates
+    //https://github.com/aspnet/AspNetCore/blob/c565386a3ed135560bc2e9017aa54a950b4e35dd/src/Mvc/Mvc.ViewFeatures/src/DefaultEditorTemplates.cs
+    //https://github.com/aspnet/AspNetCore/blob/c565386a3ed135560bc2e9017aa54a950b4e35dd/src/Mvc/Mvc.ViewFeatures/src/DefaultDisplayTemplates.cs
+
+    //View Engine
+    //https://github.com/aspnet/AspNetCore/blob/19c9010c2fc44f6fa3952c3f46d1b6e86e45fa8c/src/Mvc/Mvc.Razor/src/RazorViewEngine.cs
+
+    //Html Helper
+    //https://github.com/aspnet/AspNetCore/blob/c565386a3ed135560bc2e9017aa54a950b4e35dd/src/Mvc/Mvc.ViewFeatures/src/HtmlHelper.cs
+
+    //https://github.com/aspnet/AspNetCore/blob/c565386a3ed135560bc2e9017aa54a950b4e35dd/src/Mvc/Mvc.ViewFeatures/src/TemplateBuilder.cs
+    //New model Explorer generated.
+    //  viewData.ModelExplorer = _modelExplorer.GetExplorerForModel(_model); 
+
+    //https://github.com/aspnet/AspNetCore/blob/c565386a3ed135560bc2e9017aa54a950b4e35dd/src/Mvc/Mvc.ViewFeatures/src/ModelExplorer.cs
+    //
     public class DynamicFormsModelMetadataProviderSingleton : DefaultModelMetadataProvider, IDynamicFormsModelMetadataProviderSingleton
     {
         public DynamicFormsModelMetadataProviderSingleton(ICompositeMetadataDetailsProvider detailsProvider)
@@ -25,6 +53,8 @@ namespace DynamicForms.Providers.DynamicForms.Metadata
         }
 
         //https://stackoverflow.com/questions/47296817/getting-imetadatadetailsproviders-to-run-more-than-once-in-asp-net-core
+
+        //ModelMetadataProviderExtensions.GetModelExplorerForType calls back into this message
         public override ModelMetadata GetMetadataForType(Type modelType)
         {
             //  Optimization for intensively used System.Object

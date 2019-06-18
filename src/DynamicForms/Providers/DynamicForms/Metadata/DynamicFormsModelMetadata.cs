@@ -8,6 +8,7 @@ using System.Reflection;
 
 namespace DynamicForms.Providers.DynamicForms.Metadata
 {
+    //https://github.com/aspnet/AspNetCore/blob/c565386a3ed135560bc2e9017aa54a950b4e35dd/src/Mvc/Mvc.Core/src/ModelBinding/Metadata/DefaultModelMetadata.cs
     public class DynamicFormsModelMetadata : DefaultModelMetadata
     {
         public new ModelMetadataIdentity Identity { get { return base.Identity; } }
@@ -25,9 +26,9 @@ namespace DynamicForms.Providers.DynamicForms.Metadata
             _customProvider = provider;
         }
 
-        public ModelPropertyCollection PropertiesRuntime(object model)
+        //Generally the Properties are based on the Model Type and not the Model instance.
+        public ModelPropertyCollection Contextualize(object model)
         {
-
             if (!(model is ICustomTypeDescriptor))
             {
                 return Properties;
@@ -73,10 +74,12 @@ namespace DynamicForms.Providers.DynamicForms.Metadata
             }
         }
 
+
+        public bool NormalHashing { get; set; }
         //1.
         public override int GetHashCode()
         {
-            if (MetadataKind != ModelMetadataKind.Property || !ContainerType.GetInterfaces().Contains(typeof(ICustomTypeDescriptor)))
+            if (NormalHashing || MetadataKind != ModelMetadataKind.Property || !ContainerType.GetInterfaces().Contains(typeof(ICustomTypeDescriptor)))
             {
                 return base.GetHashCode();
             }
@@ -95,7 +98,7 @@ namespace DynamicForms.Providers.DynamicForms.Metadata
         //2.
         public override bool Equals(object obj)
         {
-            if (MetadataKind != ModelMetadataKind.Property || !ContainerType.GetInterfaces().Contains(typeof(ICustomTypeDescriptor)))
+            if (NormalHashing || MetadataKind != ModelMetadataKind.Property || !ContainerType.GetInterfaces().Contains(typeof(ICustomTypeDescriptor)))
             {
                 return base.Equals(obj);
             }

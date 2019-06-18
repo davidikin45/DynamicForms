@@ -1,8 +1,8 @@
 ﻿@model dynamic
 
 @{
-    var properties = ((DynamicFormsModelMetadata)ViewData.ModelMetadata).PropertiesRuntime(ViewData.Model);
-    var propertyModelExplorers = Html.ModelExplorerPropertiesRuntime();
+    var properties = ((DynamicFormsModelMetadata)ViewData.ModelMetadata).Contextualize(ViewData.Model);
+    var propertyModelExplorers = Html.ViewData.ModelExplorer.Contextualize(Html.MetadataProvider);
 }
 @using (Html.BeginForm())
 {

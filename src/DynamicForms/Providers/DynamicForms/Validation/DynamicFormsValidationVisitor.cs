@@ -23,6 +23,7 @@ namespace DynamicForms.Providers.DynamicForms.Validation
                 return true;
             }
 
+
             var entry = GetValidationEntry(model);
             key = entry?.Key ?? key ?? string.Empty;
             metadata = entry?.Metadata ?? metadata;
@@ -40,6 +41,7 @@ namespace DynamicForms.Providers.DynamicForms.Validation
                 CurrentPath.Pop(model);
                 return true;
             }
+
 
             using (StateManager.Recurse(this, key ?? string.Empty, metadata, model, strategy))
             {

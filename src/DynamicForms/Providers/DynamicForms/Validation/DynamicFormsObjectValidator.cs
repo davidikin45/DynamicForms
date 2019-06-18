@@ -8,23 +8,33 @@ using System.Collections.Generic;
 namespace DynamicForms.Providers.DynamicForms.Validation
 {
     //.Net Core Object validator
-    public class DynamicFormsObjectValidator : DefaultObjectValidator
+    public class DynamicFormsObjectValidator : ObjectModelValidator
     {
+        private readonly MvcOptions _mvcOptions;
         private readonly IDynamicFormsModelMetadataProviderSingleton _customModelMetadataProvider;
-        public DynamicFormsObjectValidator(IDynamicFormsModelMetadataProviderSingleton modelMetadataProvider, IList<IModelValidatorProvider> validatorProviders)
-            :base(modelMetadataProvider, validatorProviders)
+        public DynamicFormsObjectValidator(
+            IDynamicFormsModelMetadataProviderSingleton modelMetadataProvider, 
+            MvcOptions mvcOptions)
+            :base(modelMetadataProvider, mvcOptions.ModelValidatorProviders)
         {
+            _mvcOptions = mvcOptions;
             _customModelMetadataProvider = modelMetadataProvider;
         }
 
         public override ValidationVisitor GetValidationVisitor(ActionContext actionContext, IModelValidatorProvider validatorProvider, ValidatorCache validatorCache, IModelMetadataProvider metadataProvider, ValidationStateDictionary validationState)
         {
-            return new DynamicFormsValidationVisitor(
+            var visitor = new DynamicFormsValidationVisitor(
                 actionContext,
                 validatorProvider,
                 validatorCache,
                 _customModelMetadataProvider,
-                validationState);
+                validationState)
+            {
+                MaxValidationDepth = _mvcOptions.MaxValidationDepth,
+                ValidateComplexTypesIfChildValidationFails = false
+            };
+
+            return visitor;
         }
     }
 }

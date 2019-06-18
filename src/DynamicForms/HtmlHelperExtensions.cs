@@ -1,98 +1,103 @@
 ﻿using HtmlTags;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Encodings.Web;
 
 namespace DynamicForms
 {
     public static class HtmlHelperExtensions
     {
-        ////https://daveaglick.com/posts/getting-an-htmlhelper-for-an-alternate-model-type
-        //public static HtmlHelper<TModel> For<TModel>(this IHtmlHelper helper) where TModel : class, new()
-        //{
-        //    return For<TModel>(helper.ViewContext, helper.ViewData);
-        //}
+        //https://daveaglick.com/posts/getting-an-htmlhelper-for-an-alternate-model-type
+        public static HtmlHelper<TModel> For<TModel>(this IHtmlHelper helper) where TModel : class, new()
+        {
+            return For<TModel>(helper.ViewContext, helper.ViewData);
+        }
 
-        //public static HtmlHelper<TModel> For<TModel>(this IHtmlHelper helper, TModel model)
-        //{
-        //    return For<TModel>(helper.ViewContext, helper.ViewData, model);
-        //}
+        public static HtmlHelper<TModel> For<TModel>(this IHtmlHelper helper, TModel model)
+        {
+            return For<TModel>(helper.ViewContext, helper.ViewData, model);
+        }
 
-        //public static HtmlHelper<dynamic> For(this IHtmlHelper helper, dynamic model)
-        //{
-        //    return For(helper.ViewContext, helper.ViewData, model);
-        //}
+        public static HtmlHelper<dynamic> For(this IHtmlHelper helper, dynamic model)
+        {
+            return For(helper.ViewContext, helper.ViewData, model);
+        }
 
-        //public static HtmlHelper<TModel> For<TModel>(ViewContext viewContext, ViewDataDictionary viewData) where TModel : class, new()
-        //{
-        //    TModel model = new TModel();
-        //    return For<TModel>(viewContext, viewData, model);
-        //}
+        public static HtmlHelper<TModel> For<TModel>(ViewContext viewContext, ViewDataDictionary viewData) where TModel : class, new()
+        {
+            TModel model = new TModel();
+            return For<TModel>(viewContext, viewData, model);
+        }
 
-        //public static HtmlHelper<TModel> For<TModel>(ViewContext viewContext, ViewDataDictionary viewData, TModel model)
-        //{
+        public static HtmlHelper<TModel> For<TModel>(ViewContext viewContext, ViewDataDictionary viewData, TModel model)
+        {
 
-        //    var metadataProvider = HttpContext.GetInstance<IModelMetadataProvider>();
-        //    //var metadataProvider = new EmptyModelMetadataProvider();
+            var metadataProvider = (IModelMetadataProvider)viewContext.HttpContext.RequestServices.GetService(typeof(IModelMetadataProvider));
+            //var metadataProvider = new EmptyModelMetadataProvider();
 
-        //    var newViewData = new ViewDataDictionary<TModel>(metadataProvider, new ModelStateDictionary()) { Model = model };
+            var newViewData = new ViewDataDictionary<TModel>(metadataProvider, new ModelStateDictionary()) { Model = model };
 
-        //    ViewContext newViewContext = new ViewContext(
-        //        viewContext,
-        //        viewContext.View,
-        //        newViewData,
-        //        viewContext.TempData,
-        //        viewContext.Writer,
-        //       new HtmlHelperOptions());
+            ViewContext newViewContext = new ViewContext(
+                viewContext,
+                viewContext.View,
+                newViewData,
+                viewContext.TempData,
+                viewContext.Writer,
+               new HtmlHelperOptions());
 
-        //    var helper = new HtmlHelper<TModel>(
-        //        HttpContext.GetInstance<IHtmlGenerator>(),
-        //        HttpContext.GetInstance<ICompositeViewEngine>(),
-        //        HttpContext.GetInstance<IModelMetadataProvider>(),
-        //        HttpContext.GetInstance<IViewBufferScope>(),
-        //        HttpContext.GetInstance<HtmlEncoder>(),
-        //        HttpContext.GetInstance<UrlEncoder>(),
-        //        HttpContext.GetInstance<ExpressionTextCache>());
+            var helper = new HtmlHelper<TModel>(
+                (IHtmlGenerator)viewContext.HttpContext.RequestServices.GetService(typeof(IHtmlGenerator)),
+                (ICompositeViewEngine)viewContext.HttpContext.RequestServices.GetService(typeof(ICompositeViewEngine)),
+                (IModelMetadataProvider)viewContext.HttpContext.RequestServices.GetService(typeof(IModelMetadataProvider)),
+                (IViewBufferScope)viewContext.HttpContext.RequestServices.GetService(typeof(IViewBufferScope)),
+                (HtmlEncoder)viewContext.HttpContext.RequestServices.GetService(typeof(HtmlEncoder)),
+                (UrlEncoder)viewContext.HttpContext.RequestServices.GetService(typeof(UrlEncoder)),
+                (ExpressionTextCache)viewContext.HttpContext.RequestServices.GetService(typeof(ExpressionTextCache)));
 
-        //    helper.Contextualize(newViewContext);
+            helper.Contextualize(newViewContext);
 
-        //    return helper;
-        //}
+            return helper;
+        }
 
-        //public static HtmlHelper<dynamic> ForDynamic(this IHtmlHelper helper, dynamic model)
-        //{
-        //    return ForDynamic(helper.ViewContext, helper.ViewData, model);
-        //}
+        public static HtmlHelper<dynamic> ForDynamic(this IHtmlHelper helper, dynamic model)
+        {
+            return ForDynamic(helper.ViewContext, helper.ViewData, model);
+        }
 
-        //public static HtmlHelper<dynamic> ForDynamic(ViewContext viewContext, ViewDataDictionary viewData, dynamic model)
-        //{
+        public static HtmlHelper<dynamic> ForDynamic(ViewContext viewContext, ViewDataDictionary viewData, dynamic model)
+        {
 
-        //    var newViewData = new ViewDataDictionary<dynamic>(new EmptyModelMetadataProvider(), new ModelStateDictionary()) { Model = model };
+            var newViewData = new ViewDataDictionary<dynamic>(new EmptyModelMetadataProvider(), new ModelStateDictionary()) { Model = model };
 
-        //    ViewContext newViewContext = new ViewContext(
-        //        viewContext,
-        //        viewContext.View,
-        //        newViewData,
-        //        viewContext.TempData,
-        //        viewContext.Writer,
-        //        new HtmlHelperOptions());
+            ViewContext newViewContext = new ViewContext(
+                viewContext,
+                viewContext.View,
+                newViewData,
+                viewContext.TempData,
+                viewContext.Writer,
+                new HtmlHelperOptions());
 
-        //    var helper = new HtmlHelper<dynamic>(
-        //        HttpContext.GetInstance<IHtmlGenerator>(),
-        //        HttpContext.GetInstance<ICompositeViewEngine>(),
-        //        HttpContext.GetInstance<IModelMetadataProvider>(),
-        //        HttpContext.GetInstance<IViewBufferScope>(),
-        //        HttpContext.GetInstance<HtmlEncoder>(),
-        //        HttpContext.GetInstance<UrlEncoder>(),
-        //        HttpContext.GetInstance<ExpressionTextCache>());
+            var helper = new HtmlHelper<dynamic>(
+               (IHtmlGenerator)viewContext.HttpContext.RequestServices.GetService(typeof(IHtmlGenerator)),
+                (ICompositeViewEngine)viewContext.HttpContext.RequestServices.GetService(typeof(ICompositeViewEngine)),
+                (IModelMetadataProvider)viewContext.HttpContext.RequestServices.GetService(typeof(IModelMetadataProvider)),
+                (IViewBufferScope)viewContext.HttpContext.RequestServices.GetService(typeof(IViewBufferScope)),
+                (HtmlEncoder)viewContext.HttpContext.RequestServices.GetService(typeof(HtmlEncoder)),
+                (UrlEncoder)viewContext.HttpContext.RequestServices.GetService(typeof(UrlEncoder)),
+                (ExpressionTextCache)viewContext.HttpContext.RequestServices.GetService(typeof(ExpressionTextCache)));
 
-        //    helper.Contextualize(newViewContext);
+            helper.Contextualize(newViewContext);
 
-        //    return helper;
-        //}
+            return helper;
+        }
 
         public static Dictionary<string, string> ToDictionary(this Object attributes)
         {
